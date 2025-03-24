@@ -6,12 +6,17 @@ class User < ApplicationRecord
     validates :email, presence: true, uniqueness: true
     validates :password, length: { minimum: 6 }
   
-    before_save :downcase_email  # this need a callback
+    before_save :downcase_email
+    before_create :generate_auth_token
   
     private
 
     def downcase_email
       self.email = email.downcase
+    end
+
+    def generate_auth_token
+      self.auth_token = SecureRandom.hex(24)
     end
     #self means 
     #private → Methods below this line cannot be called outside the class.
@@ -22,4 +27,3 @@ class User < ApplicationRecord
     #
     #.downcase converts the email to lowercase.
 end
-  
