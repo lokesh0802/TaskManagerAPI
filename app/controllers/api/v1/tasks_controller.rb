@@ -49,6 +49,7 @@ module Api
         
             def authenticate_user
               token = request.headers["Authorization"]
+              return render json: { error: "Missing token" }, status: :unauthorized if token.blank?
               @current_user = User.find_by(auth_token: token)
             
               render json: { error: "Unauthorized" }, status: :unauthorized unless @current_user
